@@ -17,6 +17,9 @@ module.exports = {
 
 // create a new product => api/products/admin
 async function createProduct(req, res, next) {
+  req.body.user = req.user.id;
+  console.log("hasan" + req.body.user);
+
   await Product.create(req.body, function (err, product) {
     if (err) {
       return next(new ErrorHandler("Product not found", 404));

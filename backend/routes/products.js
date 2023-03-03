@@ -6,10 +6,25 @@ const {
   authorizedRoles,
 } = require("../middlewares/authenticated");
 
-router.get("/", isAutheticated, authorizedRoles("admin"), productCtrl.index);
-router.post("/admin", isAutheticated, productCtrl.createProduct);
+router.get("/", isAutheticated, productCtrl.index);
+router.post(
+  "/admin",
+  isAutheticated,
+  authorizedRoles("admin"),
+  productCtrl.createProduct
+);
 router.get("/:id", productCtrl.show);
-router.put("/admin/:id", isAutheticated, productCtrl.update);
-router.delete("/admin/:id", isAutheticated, productCtrl.deleteProduct);
+router.put(
+  "/admin/:id",
+  isAutheticated,
+  authorizedRoles("admin"),
+  productCtrl.update
+);
+router.delete(
+  "/admin/:id",
+  isAutheticated,
+  authorizedRoles("admin"),
+  productCtrl.deleteProduct
+);
 
 module.exports = router;

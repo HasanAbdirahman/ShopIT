@@ -1,11 +1,11 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
+const sendEmail = require("../utils/sendEmails");
 
-// REGISTER USER => api/register
+// REGISTER USER => api/user/register
 const registerUser = catchAsyncErrors(async (req, res, next) => {
   const { name, email, password } = req.body;
   const user = await User.create({
@@ -21,7 +21,7 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-// Login user => api/login
+// Login user => api/user/login
 const loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -41,7 +41,41 @@ const loginUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-// logout user => api/logout
+// Forgit password => api/user/password/forgot
+const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new ErrorHandler("User not found with this email", 404));
+  }
+  // get reset token
+  const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  // crete reset password url
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/users/password/${resetToken}`;
+
+  const message = `Your Password reset token is as follows:\n\n${resetUrl}\n\n If you did not make this request, please ignore `;
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "ShopIT password recovery",
+      message,
+    });
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email}`,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// logout user => api/user/logout
 
 const logout = catchAsyncErrors(async (req, res) => {
   res.cookie("token", null, {
@@ -59,4 +93,5 @@ module.exports = {
   registerUser,
   loginUser,
   logout,
+  forgotPassword,
 };

@@ -12,6 +12,7 @@ const isAutheticated = catchAsyncErrors(async (req, res, next) => {
   }
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   console.log(decoded.id + "hasan");
+  console.log("ali" + req.body.id);
   req.user = await User.findById(decoded.id);
   next();
 });
@@ -20,7 +21,6 @@ const isAutheticated = catchAsyncErrors(async (req, res, next) => {
 
 const authorizedRoles = function (...roles) {
   return (req, res, next) => {
-    console.log(req.user);
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorHandler(

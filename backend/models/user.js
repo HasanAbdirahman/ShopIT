@@ -3,6 +3,7 @@ const validator = require("validator");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const userSchema = new Schema({
   name: {
@@ -64,11 +65,30 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Return JWT token
-userSchema.methods.getjwtToken = () => {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+// Return JWT token dont use arrow function
+userSchema.methods.getjwtToken = function () {
+  let hasan = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.EXPIRES_IN,
   });
+  console.log(this._id);
+  return hasan;
+};
+// generate password reset token
+userSchema.methods.getResetPasswordToken = function () {
+  // generate token crypto generate s random bytes and its buffer hence use tostring
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // encrypt token by hashing and set it to resetPasswordToken
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // set token expire time
+  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+
+  // we are reset token the way it is but when we are storing it needs to be encrypted
+  return resetToken;
 };
 
 module.exports = mongoose.model("User", userSchema);
