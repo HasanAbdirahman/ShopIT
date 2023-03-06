@@ -9,9 +9,11 @@ const errorMiddleware = require("./utils/errorHandler");
 // import all routes
 const products = require("./routes/products");
 const users = require("./routes/users");
+const orders = require("./routes/orders");
 
 app.use("/api/products", products);
 app.use("/api/users", users);
+app.use("/api/order", orders);
 
 // mounting the errorMiddleware handler
 app.use(errorMiddleware);
