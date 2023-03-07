@@ -17,4 +17,16 @@ router.get(
   ordersCtrl.allOrders
 );
 
+router.put(
+  "/admin/updateOrder/:id",
+  isAutheticated,
+  authorizedRoles("admin"),
+  ordersCtrl.updateOrder
+);
+router.delete(
+  "/admin/deleteOrder/:id",
+  isAutheticated,
+  authorizedRoles("admin"),
+  ordersCtrl.deleteOrder
+);
 module.exports = router;
