@@ -37,22 +37,27 @@ async function createProduct(req, res, next) {
 //   });
 // };
 async function index(req, res, next) {
+  return next(new ErrorHandler("My Error", 404));
+
   // the number of items that the page will have
-  const resPerPage = 4;
+  const resPerPage = 8;
   // countDocuments returns the number of documents in the collection
-  const productCount = await Product.countDocuments();
+  const productsCount = await Product.countDocuments();
+
   const apiFeatures = new APIFeautures(Product.find(), req.query)
     .search()
     .filter()
     .pagination(resPerPage);
 
   let products = await apiFeatures.query;
-  res.status(200).json({
-    success: true,
-    counts: products.length,
-    products,
-    productCount,
-  });
+  setTimeout(() => {
+    res.status(200).json({
+      success: true,
+      counts: products.length,
+      products,
+      productsCount,
+    });
+  }, 2000);
 }
 
 // get single products => /api/products/:id

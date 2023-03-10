@@ -6,13 +6,8 @@ const {
   authorizedRoles,
 } = require("../middlewares/authenticated");
 
-// this route creates a new review and updates the product as well see the controller interesting really
-router.put("/review", isAutheticated, productCtrl.createProductReview);
-
-// delete review
-router.delete("/reviews", isAutheticated, productCtrl.createProductReview);
-
-router.get("/", isAutheticated, productCtrl.index);
+// put   isAutheticated, back later
+router.get("/", productCtrl.index);
 router.post(
   "/admin",
   isAutheticated,
@@ -35,5 +30,11 @@ router.delete(
   authorizedRoles("admin"),
   productCtrl.deleteProduct
 );
+
+// this route creates a new review and updates the product as well see the controller interesting really
+router.put("/review", isAutheticated, productCtrl.createProductReview);
+
+// delete review
+router.delete("/reviews", isAutheticated, productCtrl.deleteProductReview);
 
 module.exports = router;
