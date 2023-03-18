@@ -70,14 +70,16 @@ function Home() {
                       />
                     </div>
                     <div className="col-6 col-md-9">
-                      {products &&
-                        products.map((product) => (
-                          <Product
-                            key={product._id}
-                            product={product}
-                            col={4}
-                          />
-                        ))}
+                      <div className="row">
+                        {products &&
+                          products.map((product) => (
+                            <Product
+                              key={product._id}
+                              product={product}
+                              col={4}
+                            />
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </Fragment>
