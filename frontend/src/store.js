@@ -11,12 +11,12 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import {
   productReducer,
-  productDetailReducer,
+  productDetailsReducer,
 } from "./reducers/productReducers";
 
 const reducer = combineReducers({
   products: productReducer,
-  // productDetail: productDetailReducer,
+  productDetails: productDetailsReducer,
 });
 
 // reducer initial state

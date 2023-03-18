@@ -2,9 +2,9 @@ import {
   ALL_PRODUCTS_FAIL,
   ALL_PRODUCTS_SUCCESS,
   ALL_PRODUCTS_REQUEST,
-  // ALL_DETAILS_FAIL,
-  // ALL_DETAILS_SUCCESS,
-  // ALL_DETAILS_REQUEST,
+  PRODUCT_DETAILS_FAIL,
+  PRODUCT_DETAILS_SUCCESS,
+  PRODUCT_DETAILS_REQUEST,
   CLEAR_ERRORS,
 } from "../constants/productConstant";
 
@@ -14,7 +14,7 @@ import {
 
 // actions are the only way my applications can interact with the store and they carry some information from your app to the redux store
 //  Actions are plain js objects and have a "type" property that indicates the type of action being performed
-// the type property is typically defined as astring constant
+// the type property is typically defined as a string constant
 
 export const productReducer = (state = { product: [] }, action) => {
   switch (action.type) {
@@ -27,7 +27,8 @@ export const productReducer = (state = { product: [] }, action) => {
       return {
         loading: false,
         products: action.payload.products,
-        countProducts: action.payload.countProducts,
+        productsCount: action.payload.productsCount,
+        resPerPage: action.payload.resPerPage,
       };
     case ALL_PRODUCTS_FAIL:
       return {
@@ -46,31 +47,34 @@ export const productReducer = (state = { product: [] }, action) => {
 };
 
 // product detail reducer
-// export const productDetailReducer = (state = { product: {} }, action) => {
-//   switch (action.type) {
-//     case ALL_DETAILS_REQUEST:
-//       return {
-//         ...state,
-//         loading: true,
-//       };
-//     case ALL_DETAILS_SUCCESS:
-//       return {
-//         loading: false,
-//         product: action.payload,
-//       };
-//     case ALL_DETAILS_FAIL:
-//       return {
-//         ...state,
-//         loading: false,
-//       };
 
-//     case CLEAR_ERRORS:
-//       return {
-//         ...state,
-//         error: null,
-//       };
+export const productDetailsReducer = (state = { product: {} }, action) => {
+  switch (action.type) {
+    case PRODUCT_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
 
-//     default:
-//       return state;
-//   }
-// };
+    case PRODUCT_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        product: action.payload,
+      };
+
+    case PRODUCT_DETAILS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};

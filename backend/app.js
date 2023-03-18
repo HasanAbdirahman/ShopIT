@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 app.use(express.json());
 app.use(cookieParser());
 mongoose.set("strictQuery", true);
-const errorMiddleware = require("./utils/errorHandler");
+const errorMiddleware = require("./middlewares/errors");
 // import all routes
 const products = require("./routes/products");
 const users = require("./routes/users");

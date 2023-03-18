@@ -4,7 +4,8 @@ class APIFeautures {
     this.queryStr = queryStr;
   }
   search() {
-    // the queryStr is a string that contains the query= apple in this case and we are using ternary operator
+    // the queryStr is a string that contains the query which equals apple
+    //  in this case and we are using ternary operator
     //  if its true we are going to provide the query= apple in this case or else an empty object
     const keyword = this.queryStr.keyword
       ? {
