@@ -2,10 +2,16 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-app.use(express.json());
-app.use(cookieParser());
-mongoose.set("strictQuery", true);
+const bodyparser = require("body-parser");
 const errorMiddleware = require("./middlewares/errors");
+const fileUpload = require("express-fileupload");
+mongoose.set("strictQuery", true);
+
+app.use(express.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(fileUpload());
+
 // import all routes
 const products = require("./routes/products");
 const users = require("./routes/users");

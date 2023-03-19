@@ -3,7 +3,7 @@ const router = express.Router();
 const userCtrl = require("../controllers/users");
 const { isAutheticated } = require("../middlewares/authenticated");
 
-router.post("/", userCtrl.registerUser);
+router.post("/register", userCtrl.registerUser);
 router.post("/login", userCtrl.loginUser);
 router.get("/logout", userCtrl.logout);
 // resetting and forget password happens when a person is outside and wants to log in

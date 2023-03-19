@@ -12,14 +12,17 @@ import {
 //  action receives things from the backend
 
 export const getAllProducts =
-  (keyword = "", currentPage = 1, price) =>
+  (keyword = "", currentPage = 1, price, category, rating = 0) =>
   async (dispatch) => {
     try {
-      dispatch({
-        type: ALL_PRODUCTS_REQUEST,
-      });
+      dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-      const link = `/api/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}`;
+      let link = `/api/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
+
+      if (category) {
+        link = `/api/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+      }
+
       const { data } = await axios.get(link);
 
       dispatch({

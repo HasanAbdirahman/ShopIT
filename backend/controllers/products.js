@@ -41,18 +41,22 @@ async function index(req, res, next) {
   const resPerPage = 4;
   // countDocuments returns the number of documents in the collection
   const productsCount = await Product.countDocuments();
-  console.log(" 12344" + productsCount);
   const apiFeatures = new APIFeautures(Product.find(), req.query)
     .search()
-    .filter()
-    .pagination(resPerPage);
+    .filter();
 
   let products = await apiFeatures.query;
+  let filteredProductsCount = products.length;
 
+  apiFeatures.pagination(resPerPage);
+  // Simply add clone like this if you want to execute the query second time,
+  // as we are doing. After v6.0. you can execute second query like this:.  .clone()
+  products = await apiFeatures.query.clone();
   res.status(200).json({
     success: true,
     counts: products.length,
     products,
+    filteredProductsCount,
     productsCount,
     resPerPage: resPerPage,
   });

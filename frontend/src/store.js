@@ -9,14 +9,17 @@
 import { combineReducers, applyMiddleware, legacy_createStore } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
+
 import {
   productReducer,
   productDetailsReducer,
 } from "./reducers/productReducers";
+import { userReducer } from "./reducers/userReducers";
 
 const reducer = combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
+  // user: userReducer,
 });
 
 // reducer initial state

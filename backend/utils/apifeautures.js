@@ -29,7 +29,6 @@ class APIFeautures {
     const removeFields = ["keyword", "page", "limit"];
     // removeFields is an array
     removeFields.forEach((el) => delete queryCopy[el]);
-    console.log(queryCopy);
 
     // Advanced filters eg price between 1000 and 2000 or rating greater than 5
     // fierst turning json to string and later parse it to json when returning
