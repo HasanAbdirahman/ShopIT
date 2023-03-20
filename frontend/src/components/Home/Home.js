@@ -62,6 +62,7 @@ function Home() {
   if (keyword) {
     count = filteredProductsCount;
   }
+  console.log(price);
 
   return (
     <Fragment>

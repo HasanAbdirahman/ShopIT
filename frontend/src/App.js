@@ -5,6 +5,7 @@ import Footer from "./components/layouts/Footer";
 import Home from "../.././frontend/src/components/Home/Home";
 import ProductDetails from "./components/product/productDetails";
 import Login from "./components/user/login";
+import Register from "./components/user/Register";
 function App() {
   return (
     <div className="App">
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/search/:keyword" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Login />} />
 
           <Route path="/api/products/:id" element={<ProductDetails />} />
         </Routes>
