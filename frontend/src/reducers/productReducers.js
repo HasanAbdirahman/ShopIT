@@ -31,6 +31,7 @@ export const productReducer = (state = { product: [] }, action) => {
         resPerPage: action.payload.resPerPage,
         filteredProducts: action.payload.filteredProductsCount,
       };
+
     case ALL_PRODUCTS_FAIL:
       return {
         loading: false,
@@ -48,7 +49,6 @@ export const productReducer = (state = { product: [] }, action) => {
 };
 
 // product detail reducer
-
 export const productDetailsReducer = (state = { product: {} }, action) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:

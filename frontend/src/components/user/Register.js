@@ -4,7 +4,7 @@ import MetaData from "../layouts/MetaData";
 import { useNavigate } from "react-router-dom";
 
 import { useAlert } from "react-alert";
-import { useDispatch, useSelector } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../actions/userActions";
 
 export default function Register() {

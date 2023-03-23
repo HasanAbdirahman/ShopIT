@@ -19,7 +19,7 @@ import { userReducer } from "./reducers/userReducers";
 const reducer = combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
-  // user: userReducer,
+  user: userReducer,
 });
 
 // reducer initial state

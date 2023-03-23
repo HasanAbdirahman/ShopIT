@@ -10,7 +10,6 @@ const APIFeautures = require("../utils/apifeautures");
 // create a new product => api/products/admin
 async function createProduct(req, res, next) {
   req.body.user = req.user.id;
-  console.log("hasan" + req.body.user);
 
   await Product.create(req.body, function (err, product) {
     if (err) {
@@ -52,6 +51,7 @@ async function index(req, res, next) {
   // Simply add clone like this if you want to execute the query second time,
   // as we are doing. After v6.0. you can execute second query like this:.  .clone()
   products = await apiFeatures.query.clone();
+  console.log(products);
   res.status(200).json({
     success: true,
     counts: products.length,
@@ -175,8 +175,6 @@ const getProductReviews = catchAsyncError(async (req, res, next) => {
 //  we have to pass the id of the review andid of the product
 const deleteProductReview = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
-
-  console.log(product);
 
   const reviews = product.reviews.filter(
     (review) => review._id.toString() !== req.query.id.toString()

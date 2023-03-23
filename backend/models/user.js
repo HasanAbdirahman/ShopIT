@@ -67,11 +67,10 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 
 // Return JWT token dont use arrow function
 userSchema.methods.getjwtToken = function () {
-  let hasan = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  let token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.EXPIRES_IN,
   });
-  console.log(this._id);
-  return hasan;
+  return token;
 };
 // generate password reset token
 userSchema.methods.getResetPasswordToken = function () {

@@ -17,13 +17,14 @@ export const getAllProducts =
     try {
       dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-      let link = `/api/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
+      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
 
       if (category) {
-        link = `/api/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
       }
 
       const { data } = await axios.get(link);
+      console.log(data);
 
       dispatch({
         type: ALL_PRODUCTS_SUCCESS,
@@ -44,7 +45,7 @@ export const getProductDetails = (id) => async (dispatch) => {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
 
     const { data } = await axios.get(`/api/products/${id}`);
-    console.log(data);
+
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
       payload: data.product,

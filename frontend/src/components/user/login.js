@@ -4,7 +4,7 @@ import MetaData from "../layouts/MetaData";
 import { useNavigate } from "react-router-dom";
 
 import { useAlert } from "react-alert";
-import { useDispatch, useSelector } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { clearErrors, login } from "../../actions/userActions";
@@ -13,8 +13,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const alert = useAlert();
   const dispatch = useDispatch();
+  const alert = useAlert();
   const navigate = useNavigate();
 
   const { isAuthenticated, error, loading } = useSelector(
@@ -55,7 +55,7 @@ export default function Login() {
                     id="email_field"
                     className="form-control"
                     value={email}
-                    onChnage={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
