@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { register, clearErrors } from "../../actions/userActions";
+import { registerUser, clearErrors } from "../../actions/userActions";
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -45,6 +45,8 @@ export default function Register() {
     formData.set("email", email);
     formData.set("password", password);
     formData.set("avatar", avatar);
+
+    dispatch(registerUser(formData));
   }
   function handleChange(e) {
     if (e.target.name === "avatar") {
@@ -52,7 +54,7 @@ export default function Register() {
       reader.onload = () => {
         // reader.result === -0 means no file when it is 1 means processing and when it is 2 means successful
 
-        if (reader.result === 2) {
+        if (reader.readyState === 2) {
           setAvatar(reader.result);
           setAvatarPreview(reader.result);
         }
@@ -67,7 +69,7 @@ export default function Register() {
     <Fragment>
       loading ? <Loader /> :(
       <Fragment>
-        <MetaData title="Sign up" />
+        <MetaData title={"Register User"} />
         <div className="row wrapper">
           <div className="col-10 col-lg-5">
             <form
@@ -95,6 +97,7 @@ export default function Register() {
                   type="email"
                   id="email_field"
                   className="form-control"
+                  name="email"
                   value={email}
                   onChange={handleChange}
                 />
@@ -106,6 +109,7 @@ export default function Register() {
                   type="password"
                   id="password_field"
                   className="form-control"
+                  name="password"
                   value={password}
                   onChange={handleChange}
                 />
