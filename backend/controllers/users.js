@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
@@ -16,6 +15,7 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
   });
 
   const { name, email, password } = req.body;
+  console.log(req.body);
 
   const user = await User.create({
     name,
@@ -131,7 +131,7 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-// getting current;ly logged in user => api/users/me
+// getting currently logged in user => api/users/me
 const getUserProfile = catchAsyncErrors(async (req, res, next) => {
   let user = await User.findById(req.user.id);
   res.status(200).json({
@@ -165,6 +165,21 @@ const updateProfile = catchAsyncErrors(async (req, res, next) => {
   };
 
   // Update Avatar TODO
+  if (req.body.avatar !== "") {
+    const image_id = user.avatar.public_id;
+    const res = await cloudinary.v2.uploader.destroy(image_id);
+
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    newUserData.avatar = {
+      public_id: result.public_id,
+      url: result.secure.url,
+    };
+  }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
@@ -225,6 +240,9 @@ const updateUser = catchAsyncErrors(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   };
+
+  // update avatar
+
   const user = await User.findByIdAndUpdate(req.params.id, changeData, {
     new: true,
     runValidators: true,

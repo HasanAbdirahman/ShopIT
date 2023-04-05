@@ -14,12 +14,13 @@ import {
   productReducer,
   productDetailsReducer,
 } from "./reducers/productReducers";
-import { userReducer } from "./reducers/userReducers";
+import { authReducer, userReducer } from "./reducers/authReducers";
 
 const reducer = combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
-  user: userReducer,
+  user: authReducer,
+  users: userReducer,
 });
 
 // reducer initial state

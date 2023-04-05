@@ -16,7 +16,7 @@ import {
 //  Actions are plain js objects and have a "type" property that indicates the type of action being performed
 // the type property is typically defined as a string constant
 
-export const productReducer = (state = { product: [] }, action) => {
+export const productReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case ALL_PRODUCTS_REQUEST:
       return {
@@ -49,7 +49,7 @@ export const productReducer = (state = { product: [] }, action) => {
 };
 
 // product detail reducer
-export const productDetailsReducer = (state = { products: {} }, action) => {
+export const productDetailsReducer = (state = { product: {} }, action) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:
       return {
