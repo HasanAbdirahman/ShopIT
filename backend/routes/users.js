@@ -7,7 +7,7 @@ router.post("/register", userCtrl.registerUser);
 router.post("/login", userCtrl.loginUser);
 router.get("/logout", userCtrl.logout);
 // resetting and forget password happens when a person is outside and wants to log in
-router.get("/password/forgot", userCtrl.forgotPassword);
+router.post("/password/forgot", userCtrl.forgotPassword);
 router.put("/password/reset/:token", userCtrl.resetPassword);
 router.get("/me", isAutheticated, userCtrl.getUserProfile);
 // This happens when a person already inside and logged in

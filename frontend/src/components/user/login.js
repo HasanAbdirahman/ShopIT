@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
+  const location = useLocation();
   const alert = useAlert();
   const navigate = useNavigate();
 
@@ -21,15 +22,16 @@ export default function Login() {
     (state) => state.user
   );
 
+  const redirect = location.search ? location.search.split("=")[1] : "/";
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate(`/${redirect}`);
     }
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, isAuthenticated, error]);
+  }, [dispatch, navigate, alert, isAuthenticated, error]);
 
   function handleSubmit(evt) {
     evt.preventDefault();

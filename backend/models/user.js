@@ -84,7 +84,7 @@ userSchema.methods.getResetPasswordToken = function () {
     .digest("hex");
 
   // set token expire time => remember is like when you receive a new token through email and it expires in 10 min
-  // that is what we are doing here
+  // that is what we are doing here and we are changing to millisecond
 
   this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
 

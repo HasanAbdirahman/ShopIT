@@ -46,7 +46,7 @@ export default function UpdateProfile() {
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, alert, isUpdated, error]);
+  }, [dispatch, navigate, user, alert, isUpdated, error]);
 
   function submitHandler(e) {
     e.preventDefault();

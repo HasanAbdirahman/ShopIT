@@ -62,9 +62,7 @@ const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // crete reset password url this is the link he is going to use to reset the password
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/users/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = `Your Password reset token is as follows:\n\n${resetUrl}\n\n If you did not make this request, please ignore `;
   try {

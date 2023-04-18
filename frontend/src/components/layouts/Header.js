@@ -16,6 +16,8 @@ function Header() {
   };
 
   const { user, loading } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.cart);
+
   return (
     <Fragment>
       <nav className="navbar row">
@@ -40,7 +42,7 @@ function Header() {
               Cart
             </span>
             <span className="ml-1" id="cart_count">
-              2
+              {cartItems.length}
             </span>
           </Link>
           {user ? (
