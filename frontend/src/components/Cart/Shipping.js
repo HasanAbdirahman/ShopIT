@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveShippingInfo } from "../../actions/cartActions";
 
 import { useNavigate } from "react-router-dom";
+import CheckoutSteps from "./CheckoutSteps";
 
 function Shipping() {
   const dispatch = useDispatch();
@@ -21,12 +22,13 @@ function Shipping() {
   function submitHandler(e) {
     e.preventDefault();
     dispatch(saveShippingInfo({ address, postalCode, phoneNo, country, city }));
-    navigate("/confirm");
+    navigate("/order/confirm");
   }
 
   return (
     <Fragment>
       <MetaData title={"ShippingInfo"} />
+      <CheckoutSteps shipping />
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
           <form className="shadow-lg" onSubmit={submitHandler}>
@@ -70,7 +72,7 @@ function Shipping() {
             <div className="form-group">
               <label htmlFor="postal_code_field">Postal Code</label>
               <input
-                type="number"
+                type="text"
                 id="postal_code_field"
                 className="form-control"
                 value={postalCode}
@@ -90,7 +92,7 @@ function Shipping() {
               >
                 {countriesList.map((country) => (
                   <option key={country.name} value={country.name}>
-                    {country}
+                    {country.name}
                   </option>
                 ))}
               </select>

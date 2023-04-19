@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/layouts/Header";
@@ -15,13 +15,29 @@ import UpdatePassword from "./components/user/updatePassword";
 import ForgotPassword from "./components/user/forgotPassword";
 // import NewPassword from "./components/user/NewPassword"; same as the reset password
 import ResetPassword from "./components/user/resetPassword";
-import store from "./store";
 import Cart from "./components/Cart/Cart";
 import Shipping from "./components/Cart/Shipping";
+import ConfirmOrder from "./components/Cart/confirmOrder";
+import store from "./store";
+import axios from "axios";
+
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Payment } from "./components/Cart/Payment";
 
 function App() {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
   useEffect(() => {
     store.dispatch(loadUser());
+
+    async function getStripApiKey() {
+      const { data } = await axios.get("/api/v1/stripeapi");
+
+      setStripeApiKey(data.stripeApiKey);
+    }
+
+    getStripApiKey();
   }, []);
 
   return (
@@ -36,7 +52,29 @@ function App() {
           <Route path="/password/forgot" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<ResetPassword />} />
           <Route path="/api/products/:id" element={<ProductDetails />} />
+
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order/confirm" element={<ConfirmOrder />} />
+          <Route
+            path="/shipping"
+            element={
+              <ProtectedRoute>
+                <Shipping />
+              </ProtectedRoute>
+            }
+          />
+          {stripeApiKey && (
+            <Route
+              path="/payment"
+              element={
+                <Elements stripe={loadStripe(stripeApiKey)}>
+                  <ProtectedRoute>
+                    <Payment />
+                  </ProtectedRoute>
+                </Elements>
+              }
+            />
+          )}
 
           <Route
             path="/me"
@@ -60,14 +98,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <UpdatePassword />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/shipping"
-            element={
-              <ProtectedRoute>
-                <Shipping />
               </ProtectedRoute>
             }
           />

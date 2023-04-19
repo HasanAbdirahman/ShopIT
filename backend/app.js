@@ -16,10 +16,12 @@ app.use(fileUpload());
 const products = require("./routes/products");
 const users = require("./routes/users");
 const orders = require("./routes/orders");
+const payment = require("./routes/payment");
 
 app.use("/api/products", products);
 app.use("/api/users", users);
 app.use("/api/order", orders);
+app.use("/api/v1", payment);
 
 // mounting the errorMiddleware handler
 app.use(errorMiddleware);
