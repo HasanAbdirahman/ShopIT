@@ -6,6 +6,7 @@ import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import CheckoutSteps from "./CheckoutSteps";
 import axios from "axios";
+import { createOrder, clearErrors } from "../../actions/orderAction";
 
 import {
   CardNumberElement,
@@ -26,17 +27,36 @@ const options = {
   },
 };
 
-export const Payment = () => {
+function Payment() {
   const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { shippingInfo, cartItem } = useSelector((state) => state.cart);
+  const { error } = useSelector((state) => state.newOrder);
+  const { cartItems, shippingInfo } = useSelector((state) => state.cart);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors);
+    }
+  }, [dispatch, error, alert]);
+
+  const order = {
+    orderInfo: cartItems,
+    shippingInfo,
+  };
+
   const orderInfo = JSON.parse(sessionStorage.getItem("orderItem"));
+
+  if (orderInfo) {
+    order.itemsPrice = orderInfo.itemsPrice;
+    order.shippingPrice = orderInfo.shippingPrice;
+    order.taxPrice = orderInfo.taxPrice;
+    order.totalPrice = orderInfo.totalPrice;
+  }
 
   const paymentData = {
     amount: Math.round(orderInfo.totalPrice * 100), // we have to pass the amount in cents
@@ -79,7 +99,11 @@ export const Payment = () => {
       } else {
         //payment successfull processed
         if (result.paymentIntent.status === "succeeded") {
-          // to Do
+          order.paymentInfo = {
+            id: result.paymentIntent.id,
+            status: result.paymentIntent.status,
+          };
+          dispatch(createOrder);
           navigate("/success");
         } else {
           alert.error("There is an error while processing your card");
@@ -138,4 +162,6 @@ export const Payment = () => {
       </div>
     </Fragment>
   );
-};
+}
+
+export default Payment;

@@ -9,7 +9,7 @@ const ordersCtrl = require("../controllers/orders");
 
 router.get("/me", isAutheticated, ordersCtrl.getLoggedInUserOrders);
 router.get("/:id", isAutheticated, ordersCtrl.getSingleOrder);
-router.post("/", isAutheticated, ordersCtrl.createOrder);
+router.post("/new", isAutheticated, ordersCtrl.createOrder);
 router.get(
   "/admin/orders",
   isAutheticated,

@@ -18,6 +18,9 @@ const users = require("./routes/users");
 const orders = require("./routes/orders");
 const payment = require("./routes/payment");
 
+// setting up config path
+require("dotenv").config();
+
 app.use("/api/products", products);
 app.use("/api/users", users);
 app.use("/api/order", orders);

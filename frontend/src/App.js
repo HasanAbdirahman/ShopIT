@@ -18,12 +18,12 @@ import ResetPassword from "./components/user/resetPassword";
 import Cart from "./components/Cart/Cart";
 import Shipping from "./components/Cart/Shipping";
 import ConfirmOrder from "./components/Cart/confirmOrder";
+import Payment from "./components/Cart/Payment";
 import store from "./store";
 import axios from "axios";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Payment } from "./components/Cart/Payment";
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
@@ -33,8 +33,9 @@ function App() {
 
     async function getStripApiKey() {
       const { data } = await axios.get("/api/v1/stripeapi");
-
+      console.log(data.stripeApiKey);
       setStripeApiKey(data.stripeApiKey);
+      console.log(data.stripeApiKey);
     }
 
     getStripApiKey();

@@ -1,9 +1,6 @@
 const app = require("./app");
 const cloudinary = require("cloudinary");
 
-// setting up config path
-require("dotenv").config();
-
 // connect to the db
 require("./config/database");
 
