@@ -5,18 +5,31 @@ import MetaData from "../layouts/MetaData";
 import { useEffect, Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getProductDetails, clearErrors } from "../../actions/productActions";
+import {
+  getProductDetails,
+  addReview,
+  clearErrors,
+} from "../../actions/productActions";
 import { addItemToCart } from "../../actions/cartActions";
+import { PRODUCT_REVIEW_RESET } from "../../constants/productConstant";
+import ListReviews from "../reviews/ListReviews";
 
 export default function ProductDetails() {
   const dis = useDispatch();
   const alert = useAlert();
   const params = useParams();
   const [quantity, setQuantity] = useState(1);
+  const [rating, setRating] = useState(1);
+  const [comment, setComment] = useState("");
 
   const { loading, error, product } = useSelector(
     (state) => state.productDetails
   );
+  const { user } = useSelector((state) => state.user);
+  const { error: reviewError, success } = useSelector(
+    (state) => state.newReview
+  );
+
   useEffect(() => {
     dis(getProductDetails(params.id));
 
@@ -24,7 +37,15 @@ export default function ProductDetails() {
       alert.error(error);
       dis(clearErrors());
     }
-  }, [dis, alert, error, params.id]);
+    if (reviewError) {
+      alert.error(reviewError);
+      dis(clearErrors());
+    }
+    if (success) {
+      alert.success("Review posted successfully");
+      dis({ type: PRODUCT_REVIEW_RESET });
+    }
+  }, [dis, alert, reviewError, error, params.id]);
 
   const addToCart = () => {
     dis(addItemToCart(params.id, quantity));
@@ -45,6 +66,51 @@ export default function ProductDetails() {
     const qty = count.valueAsNumber - 1;
     setQuantity(qty);
   };
+
+  function setUserRating() {
+    const stars = document.querySelectorAll(".star");
+    stars.forEach((star, index) => {
+      star.starValue = index + 1;
+
+      ["click", "mouseover", "mouseout"].forEach(function (e) {
+        stars.addEventListener(e, showRatings);
+      });
+    });
+
+    function showRatings(e) {
+      stars.forEach((star, index) => {
+        if (e.type === "click") {
+          if (index < this.starValue) {
+            star.classList.add("orange");
+            setRating(this.starValue);
+          } else {
+            star.classList.remove("orange");
+          }
+        }
+        if (e.type === "mouseover") {
+          if (index < this.starValue) {
+            star.classList.add("yellow");
+          } else {
+            star.classList.remove("yellow");
+          }
+        }
+        if (e.type === "mouseout") {
+          star.classList.remove("yellow");
+        }
+      });
+    }
+  }
+
+  function reviewHandler(e) {
+    const formData = new FormData();
+
+    // formdata the first time "rating" is the id named rating
+    formData.set("rating", rating);
+    formData.set("comment", comment);
+    formData.set("productId", params.id);
+
+    dispatchEvent(addReview(formData));
+  }
 
   return (
     <>
@@ -135,17 +201,22 @@ export default function ProductDetails() {
                 <p id="product_seller mb-3">
                   Sold by: <strong>{product.seller}</strong>
                 </p>
-
-                <button
-                  id="review_btn"
-                  type="button"
-                  className="btn btn-primary mt-4"
-                  data-toggle="modal"
-                  data-target="#ratingModal"
-                >
-                  Submit Your Review
-                </button>
-
+                {user ? (
+                  <button
+                    id="review_btn"
+                    type="button"
+                    className="btn btn-primary mt-4"
+                    data-toggle="modal"
+                    data-target="#ratingModal"
+                    onClick={setUserRating}
+                  >
+                    Submit Your Review
+                  </button>
+                ) : (
+                  <div className="alert alert-danger mt-5">
+                    Login to post your review.
+                  </div>
+                )}
                 <div className="row mt-2 mb-5">
                   <div className="rating w-50">
                     <div
@@ -165,6 +236,7 @@ export default function ProductDetails() {
                             <button
                               type="button"
                               className="close"
+                              // check this two lines below
                               data-dismiss="modal"
                               aria-label="Close"
                             >
@@ -194,12 +266,15 @@ export default function ProductDetails() {
                               name="review"
                               id="review"
                               className="form-control mt-3"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
                             ></textarea>
 
                             <button
                               className="btn my-3 float-right review-btn px-4 text-white"
                               data-dismiss="modal"
                               aria-label="Close"
+                              onClick={reviewHandler}
                             >
                               Submit
                             </button>
@@ -212,6 +287,10 @@ export default function ProductDetails() {
               </div>
             </div>
           </div>
+
+          {product.reviews && product.review.length > 0 && (
+            <ListReviews reviews={product.reviews} />
+          )}
         </Fragment>
       )}
     </>

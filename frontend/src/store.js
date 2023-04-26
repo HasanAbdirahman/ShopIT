@@ -13,23 +13,35 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   productReducer,
   productDetailsReducer,
+  productReviewReducer,
+  deleteUpdateProductReducer,
+  newProductReducer,
 } from "./reducers/productReducers";
 import {
   authReducer,
   userReducer,
   forgotPasswordReducer,
 } from "./reducers/authReducers";
-import { newOrderReducer } from "./reducers/orderReducer";
-
+import {
+  newOrderReducer,
+  myOrdersReducer,
+  orderDetailReducer,
+} from "./reducers/orderReducer";
 import { cartReducer } from "./reducers/cartReducers";
+
 const reducer = combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
+  deleteUpdateProduct: deleteUpdateProductReducer,
+  newProduct: newProductReducer,
+  newReview: productReviewReducer,
   user: authReducer,
   users: userReducer,
   forgotPassword: forgotPasswordReducer,
   cart: cartReducer,
   newOrder: newOrderReducer,
+  myOrders: myOrdersReducer,
+  orderDetail: orderDetailReducer,
 });
 
 // reducer initial state

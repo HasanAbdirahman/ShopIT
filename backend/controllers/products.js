@@ -2,13 +2,33 @@ const Product = require("../models/product");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncErrors");
 const APIFeautures = require("../utils/apifeautures");
-
+const cloudinary = require("cloudinary");
 // WHEN YOU ARE CREATING, INDEX, UPDATE, delete U HAVE TO USE ASYNC/AWAIT COZ U DONT KNOW HOW Long IT WILL BE.
 //  you have to use async/await when you are using the arrow function with the show function or else if it is the normal
 // function you will get an error HENCE dont use async/await
 
 // create a new product => api/products/admin
 async function createProduct(req, res, next) {
+  let images = [];
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    req.body.images;
+  }
+
+  let imageLinks = [];
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.v2.uploader.upload(images[i], {
+      folder: "products",
+    });
+
+    imageLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  req.body.images = imagesLinks;
   req.body.user = req.user.id;
 
   await Product.create(req.body, function (err, product) {
@@ -51,7 +71,7 @@ async function index(req, res, next) {
   // Simply add clone like this if you want to execute the query second time,
   // as we are doing. After v6.0. you can execute second query like this:.  .clone()
   products = await apiFeatures.query.clone();
-  console.log(products);
+
   res.status(200).json({
     success: true,
     counts: products.length,
@@ -111,6 +131,13 @@ async function deleteProduct(req, res, next) {
   if (!product) {
     return next(new ErrorHandler("Product not found", 404));
   }
+  // deleting the images assocated to the product
+  for (let i = 0; i < product.images; i++) {
+    let result = await cloudinary.v2.uploader.destroy(
+      product.images[i].public_id
+    );
+  }
+
   product = await Product.findByIdAndRemove(req.params.id);
   if (product) {
     res.status(200).json({
@@ -205,9 +232,20 @@ const deleteProductReview = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// GET ALL PRODUCTS FOR ADMINS => api/products/adminProducts
+const getAdminProducts = (req, res) => {
+  const products = Product.find();
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+};
+
 module.exports = {
   createProduct,
   show,
+  getAdminProducts,
   update,
   deleteProduct,
   index,

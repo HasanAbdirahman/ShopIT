@@ -51,13 +51,13 @@ const getSingleOrder = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// get logged in user orders => api/orders/me/ getting the order of the person that is logged in
+// get logged in user orders => api/order/me/ getting the order of the person that is logged in
 
 const getLoggedInUserOrders = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.find({ user: req.user.id });
+  const orders = await Order.find({ user: req.user.id });
   res.status(200).json({
     success: true,
-    order,
+    orders,
   });
 });
 
