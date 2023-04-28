@@ -82,6 +82,7 @@ export const authReducer = (state = { user: {} }, action) => {
   }
 };
 
+// when a person is already logged in
 export const userReducer = (state = { state: {} }, action) => {
   switch (action.type) {
     case UPDATE_PROFILE_REQUEST:

@@ -43,18 +43,6 @@ async function createProduct(req, res, next) {
   });
 }
 
-// getting all the products => /api/products
-// module.exports.index = async (req, res) => {
-//   // this line shows when we are searching for a product eg api/products?keyword=apple
-//   const apiFeatures = new APIFeautures(Product.find(), req.query).search();
-
-//   let products = await apiFeatures.query;
-//   res.status(200).json({
-//     success: true,
-//     counts: products.length,
-//     products,
-//   });
-// };
 async function index(req, res, next) {
   // the number of items that the page will have
   const resPerPage = 4;
@@ -95,18 +83,6 @@ function show(req, res, next) {
     }
   });
 }
-// module.exports.show = catchAsyncError(async (req, res, next) => {
-//   const product = await Product.findById(req.params.id);
-
-//   if (!product) {
-//     return next(new ErrorHandler("Product not found", 404));
-//   }
-
-//   res.status(200).json({
-//     success: true,
-//     product,
-//   });
-// });
 
 // update products => /api/products/admin/:id
 async function update(req, res, next) {

@@ -1,7 +1,6 @@
 const catchAsyncError = require("../middlewares/catchAsyncErrors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // the api key is passed in front end
-console.log("key " + process.env.STRIPE_SECRET_KEY);
 
 // process stripe payment => api/v1/payment/process
 const processPayment = catchAsyncError(async (req, res, next) => {

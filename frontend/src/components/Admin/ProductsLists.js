@@ -17,6 +17,7 @@ import { DELETE_PRODUCT_RESET } from "../../constants/productConstant";
 
 function ProductsLists() {
   const alert = useAlert();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { loading, error, products } = useSelector((state) => state.products);
@@ -39,6 +40,7 @@ function ProductsLists() {
     }
     if (isDeleted) {
       alert.success("Product is deleted successfully");
+      navigate("/admin/products");
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
   }, [dispatch, alert, deleteError, isDeleted, error]);

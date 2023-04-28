@@ -16,14 +16,11 @@ class APIFeautures {
         }
       : {};
 
-    console.log(keyword);
-
     this.query = this.query.find({ ...keyword });
     return this;
   }
   filter() {
     const queryCopy = { ...this.queryStr };
-    console.log(queryCopy);
 
     // removing fields from query since it is not in the model
     const removeFields = ["keyword", "page", "limit"];
@@ -36,7 +33,6 @@ class APIFeautures {
     // we are doing this because by default mongoose uses $ dollar sign before every comparison
     // eg gt lt lte that we are are replcing the dollar sign
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-    console.log(queryStr);
 
     this.query = this.query.find(JSON.parse(queryStr));
     return this;

@@ -12,15 +12,17 @@ import {
   PRODUCT_REVIEW_FAIL,
   PRODUCT_REVIEW_SUCCESS,
   PRODUCT_REVIEW_REQUEST,
-  CLEAR_ERRORS,
   NEW_PRODUCT_REQUEST,
   NEW_PRODUCT_SUCCESS,
   NEW_PRODUCT_FAIL,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_FAIL,
+  UPDATE_PRODUCT_SUCCESS,
+  CLEAR_ERRORS,
 } from "../constants/productConstant";
-import { config } from "dotenv";
 
 //  action receives things from the backend
 
@@ -136,6 +138,23 @@ export const deleteAction = (id) => async (dispatch) => {
     dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({ type: DELETE_PRODUCT_FAIL, error: error.response.data.message });
+  }
+};
+
+// update the product this can only be done products
+
+export const updateAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_PRODUCT_REQUEST });
+
+    const { data } = await axios.put("/api/products/admin");
+
+    dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data }.success);
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 
