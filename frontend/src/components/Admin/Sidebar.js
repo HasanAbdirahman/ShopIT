@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Sidebar() {
+const Sidebar = () => {
   return (
     <div className="sidebar-wrapper">
       <nav id="sidebar">
@@ -11,21 +11,20 @@ function Sidebar() {
               <i className="fa fa-tachometer"></i> Dashboard
             </Link>
           </li>
-          {/* data-toggle="collapse" and aria-expanded="false" they way they put it mean the li below with the link
-  will contain a sub-content that will be identified  */}
+
           <li>
-            <Link
-              to="#productSubmenu"
+            <a
+              href="#productSubmenu"
               data-toggle="collapse"
               aria-expanded="false"
               className="dropdown-toggle"
             >
-              <i className="fab fa-product-hunt"></i> Products
-            </Link>
+              <i className="fa fa-product-hunt"></i> Products
+            </a>
             <ul className="collapse list-unstyled" id="productSubmenu">
               <li>
                 <Link to="/admin/products">
-                  <i className="fa fa-clipboard-list"></i> All
+                  <i className="fa fa-clipboard"></i> All
                 </Link>
               </li>
 
@@ -48,15 +47,16 @@ function Sidebar() {
               <i className="fa fa-users"></i> Users
             </Link>
           </li>
+
           <li>
             <Link to="/admin/reviews">
-              <i className="fa fa-users"></i> Reviews
+              <i className="fa fa-star"></i> Reviews
             </Link>
           </li>
         </ul>
       </nav>
     </div>
   );
-}
+};
 
 export default Sidebar;

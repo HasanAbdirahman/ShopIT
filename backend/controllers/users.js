@@ -15,7 +15,6 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
   });
 
   const { name, email, password } = req.body;
-  console.log(req.body);
 
   const user = await User.create({
     name,
@@ -164,6 +163,8 @@ const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
   // Update Avatar TODO
   if (req.body.avatar !== "") {
+    const user = await User.findById(req.user.id);
+
     const image_id = user.avatar.public_id;
     const res = await cloudinary.v2.uploader.destroy(image_id);
 
@@ -186,6 +187,7 @@ const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    user,
   });
 });
 
@@ -260,6 +262,11 @@ const deleteUser = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("User is not found with the id " + req.params.id, 404)
     );
   }
+
+  // remove user image that is associated with
+  const imageId = user.avatar.public_id;
+  await cloudinary.v2.uploader.destroy(imageId);
+
   await user.remove();
   res.status(200).json({
     success: true,

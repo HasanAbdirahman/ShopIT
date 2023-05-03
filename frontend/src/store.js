@@ -21,11 +21,16 @@ import {
   authReducer,
   userReducer,
   forgotPasswordReducer,
+  allUserReducer,
+  updateDeleteReducer,
+  userDetailReducer,
 } from "./reducers/authReducers";
 import {
   newOrderReducer,
   myOrdersReducer,
   orderDetailReducer,
+  allOrdersReducer,
+  updateDeleteOrderReducer,
 } from "./reducers/orderReducer";
 import { cartReducer } from "./reducers/cartReducers";
 
@@ -37,11 +42,16 @@ const reducer = combineReducers({
   newReview: productReviewReducer,
   user: authReducer,
   users: userReducer,
+  userDetail: userDetailReducer,
+  updateDeleteUser: updateDeleteReducer,
   forgotPassword: forgotPasswordReducer,
+  allUsers: allUserReducer,
   cart: cartReducer,
   newOrder: newOrderReducer,
+  allOrders: allOrdersReducer,
   myOrders: myOrdersReducer,
   orderDetail: orderDetailReducer,
+  order: updateDeleteOrderReducer,
 });
 
 // reducer initial state

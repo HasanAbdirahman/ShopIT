@@ -42,10 +42,15 @@ import { loadStripe } from "@stripe/stripe-js";
 import Dashboard from "./components/Admin/Dashboard";
 import ProductsLists from "./components/Admin/ProductsLists";
 import NewProduct from "./components/Admin/NewProduct";
+import UpdatedProduct from "./components/Admin/UpdatedProduct";
+import OrderLists from "./components/Admin/OrderLists";
+import ProcessOrder from "./components/Admin/ProcessOrder";
+import UserLists from "./components/Admin/UserLists";
+import UpdateUser from "./components/Admin/UpdateUser";
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
-  const { user, loading } = useSelector((state) => state.user);
+  const { user, loading, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     store.dispatch(loadUser());
@@ -86,9 +91,7 @@ function App() {
               path="/payment"
               element={
                 <Elements stripe={loadStripe(stripeApiKey)}>
-                  <ProtectedRoute>
-                    <Payment />
-                  </ProtectedRoute>
+                  <Payment />
                 </Elements>
               }
             />
@@ -136,40 +139,87 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/*  admin */}
-
-          <Route
-            path="/dashboard"
-            isAdmin={true}
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/products"
-            isAdmin={true}
-            element={
-              <ProtectedRoute>
-                <ProductsLists />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/product"
-            element={
-              <ProtectedRoute>
-                <NewProduct />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </div>
 
-      {!loading && user.role === "admin" && <Footer />}
+      {/*  admin */}
+
+      <Routes>
+        <Route
+          path="/admin/products"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <ProductsLists />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/product"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <NewProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/product/:id"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <UpdatedProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/order/:id"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <ProcessOrder />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute>
+              <OrderLists />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <UserLists />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/user/:id"
+          isAdmin={true}
+          element={
+            <ProtectedRoute>
+              <UpdateUser />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+
+      {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}
     </div>
   );
 }

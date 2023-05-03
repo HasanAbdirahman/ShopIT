@@ -15,6 +15,7 @@ import {
   NEW_PRODUCT_FAIL,
   NEW_PRODUCT_RESET,
   NEW_PRODUCT_SUCCESS,
+  NEW_PRODUCT_REQUEST,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_FAIL,
   DELETE_PRODUCT_RESET,
@@ -23,7 +24,10 @@ import {
   UPDATE_PRODUCT_FAIL,
   UPDATE_PRODUCT_RESET,
   UPDATE_PRODUCT_SUCCESS,
-  NEW_PRODUCT_REQUEST,
+  // ADMIN_PRODUCT_REVIEW_FAIL,
+  // ADMIN_PRODUCT_REVIEW_RESET,
+  // ADMIN_PRODUCT_REVIEW_SUCCESS,
+  // ADMIN_PRODUCT_REVIEW_REQUEST,
   CLEAR_ERRORS,
 } from "../constants/productConstant";
 
@@ -158,16 +162,16 @@ export const productReviewReducer = (state = {}, action) => {
         loading: false,
         success: action.payload,
       };
-    case PRODUCT_REVIEW_RESET:
-      return {
-        ...state,
-        success: false,
-      };
 
     case PRODUCT_REVIEW_FAIL:
       return {
         ...state,
         error: action.payload,
+      };
+    case PRODUCT_REVIEW_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

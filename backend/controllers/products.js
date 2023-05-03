@@ -13,7 +13,7 @@ async function createProduct(req, res, next) {
   if (typeof req.body.images === "string") {
     images.push(req.body.images);
   } else {
-    req.body.images;
+    images = req.body.images;
   }
 
   let imageLinks = [];
@@ -91,10 +91,39 @@ async function update(req, res, next) {
     return next(new ErrorHandler("Product not found", 404));
   }
 
+  let images = [];
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
+
+  if (images !== undefined) {
+    // deleting the images assocated to the product
+    for (let i = 0; i < product.images.length; i++) {
+      let result = await cloudinary.v2.uploader.destroy(
+        product.images[i].public_id
+      );
+    }
+
+    let imageLinks = [];
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: "products",
+      });
+      imageLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+    req.body.images = imagesLinks;
+  }
+
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
+
   res.status(200).json({
     success: true,
     product,
@@ -108,23 +137,22 @@ async function deleteProduct(req, res, next) {
     return next(new ErrorHandler("Product not found", 404));
   }
   // deleting the images assocated to the product
-  for (let i = 0; i < product.images; i++) {
+  for (let i = 0; i < product.images.length; i++) {
     let result = await cloudinary.v2.uploader.destroy(
       product.images[i].public_id
     );
   }
 
-  product = await Product.findByIdAndRemove(req.params.id);
-  if (product) {
-    res.status(200).json({
-      success: true,
-      product,
-    });
-  }
+  await product.remove();
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
 }
 
 // create new review => api/product/createReview
-const createProductReview = catchAsyncError(async (req, res, next) => {
+async function createProductReview(req, res, next) {
   const { rating, comment, productId } = req.body;
 
   const review = {
@@ -137,7 +165,7 @@ const createProductReview = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(productId);
 
   const isReviewed = product.reviews.find(
-    (r) => r.user.toString() === req.user._id.toString()
+    (r) => r.user?.toString() === req.user?._id.toString()
   );
 
   if (isReviewed) {
@@ -161,10 +189,9 @@ const createProductReview = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
-});
+}
 
 //  get product reviews => api/products/reviews
-
 const getProductReviews = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.query.id);
 
@@ -209,8 +236,8 @@ const deleteProductReview = catchAsyncError(async (req, res, next) => {
 });
 
 // GET ALL PRODUCTS FOR ADMINS => api/products/adminProducts
-const getAdminProducts = (req, res) => {
-  const products = Product.find();
+const getAdminProducts = async (req, res) => {
+  const products = await Product.find();
 
   res.status(200).json({
     success: true,

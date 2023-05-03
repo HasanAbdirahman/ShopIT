@@ -9,6 +9,7 @@ function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   const increaseQty = (id, quantity, stock) => {
     const newQty = quantity + 1;
@@ -33,7 +34,11 @@ function Cart() {
     // by clicking checkout button and then he is redirected to the login page after that to
     //  the shipping page
     // go to the login file and see what the redirects shows
-    navigate("/login?redirect=shipping");
+    if (isAuthenticated) {
+      navigate("/shipping");
+    } else {
+      navigate("/login");
+    }
   };
 
   return (

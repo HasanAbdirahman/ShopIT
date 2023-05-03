@@ -14,7 +14,6 @@ function Header() {
     dispatch(logout());
     alert.success("Logged out successfully");
   };
-
   const { user, loading } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
 

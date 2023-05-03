@@ -9,43 +9,40 @@ import Sidebar from "./Sidebar";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAdminProducts,
-  deleteProduct,
+  allOrdersAction,
+  deleteOrderAction,
   clearErrors,
-} from "../../actions/productActions";
-import { DELETE_PRODUCT_RESET } from "../../constants/productConstant";
+} from "../../actions/orderAction";
+import { DELETE_ORDER_RESETS } from "../../constants/orderConstant";
 
-const ProductsList = () => {
+const OrderLists = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, products } = useSelector((state) => state.products);
-  const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.deleteUpdateProduct
-  );
+  const { error, loading, orders } = useSelector((state) => state.allOrders);
+  const { isDeleted } = useSelector((state) => state.order);
 
   useEffect(() => {
-    dispatch(getAdminProducts());
+    dispatch(allOrdersAction());
 
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
 
-    if (deleteError) {
-      alert.error(deleteError);
-      dispatch(clearErrors());
-    }
-
     if (isDeleted) {
       alert.success("Product deleted successfully");
-      navigate("/admin/products");
-      dispatch({ type: DELETE_PRODUCT_RESET });
+      navigate("/admin/orders");
+      dispatch({ type: DELETE_ORDER_RESETS });
     }
-  }, [dispatch, alert, error, deleteError, isDeleted, navigate]);
+  }, [dispatch, alert, error, isDeleted, navigate]);
 
-  const setProducts = () => {
+  const deleteHandler = (id) => {
+    dispatch(deleteOrderAction(id));
+  };
+
+  const setOrders = () => {
     const data = {
       columns: [
         {
@@ -54,18 +51,18 @@ const ProductsList = () => {
           sort: "asc",
         },
         {
-          label: "Name",
-          field: "name",
+          label: "No Of Items",
+          field: "numOfItems",
           sort: "asc",
         },
         {
-          label: "Price",
-          field: "price",
+          label: "Amount",
+          field: "amount",
           sort: "asc",
         },
         {
-          label: "Stock",
-          field: "stock",
+          label: "Status",
+          field: "status",
           sort: "asc",
         },
         {
@@ -76,23 +73,28 @@ const ProductsList = () => {
       rows: [],
     };
 
-    products.forEach((product) => {
+    orders.forEach((order) => {
       data.rows.push({
-        id: product._id,
-        name: product.name,
-        price: `$${product.price}`,
-        stock: product.stock,
+        id: order._id,
+        numOfItems: order.orderItems.length,
+        amount: `$${order.totalPrice}`,
+        status:
+          order.orderStatus && order.orderStatus.includes("Delivered") ? (
+            <p style={{ color: "green" }}>{order.orderStatus}</p>
+          ) : (
+            <p style={{ color: "red" }}>{order.orderStatus}</p>
+          ),
         actions: (
           <Fragment>
             <Link
-              to={`/admin/product/${product._id}`}
+              to={`/admin/order/${order._id}`}
               className="btn btn-primary py-1 px-2"
             >
-              <i className="fa fa-pencil"></i>
+              <i className="fa fa-eye"></i>
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
-              onClick={() => deleteProductHandler(product._id)}
+              onClick={() => deleteHandler(order._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -104,13 +106,9 @@ const ProductsList = () => {
     return data;
   };
 
-  const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id));
-  };
-
   return (
     <Fragment>
-      <MetaData title={"All Products"} />
+      <MetaData title={"All Orders"} />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />
@@ -124,7 +122,7 @@ const ProductsList = () => {
               <Loader />
             ) : (
               <MDBDataTable
-                data={setProducts()}
+                data={setOrders()}
                 className="px-3"
                 bordered
                 striped
@@ -138,4 +136,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default OrderLists;

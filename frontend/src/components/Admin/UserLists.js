@@ -9,24 +9,24 @@ import Sidebar from "./Sidebar";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAdminProducts,
-  deleteProduct,
+  allUsersAction,
   clearErrors,
-} from "../../actions/productActions";
-import { DELETE_PRODUCT_RESET } from "../../constants/productConstant";
+  deleteUserAction,
+} from "../../actions/userActions";
 
-const ProductsList = () => {
+import { DELETE_USER_RESET } from "../../constants/userConstant";
+
+function UserLists() {
   const alert = useAlert();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { loading, error, products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+  const { loading, error, users } = useSelector((state) => state.allUsers);
   const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.deleteUpdateProduct
+    (state) => state.updateDeleteUser
   );
 
   useEffect(() => {
-    dispatch(getAdminProducts());
+    dispatch(allUsersAction());
 
     if (error) {
       alert.error(error);
@@ -40,16 +40,20 @@ const ProductsList = () => {
 
     if (isDeleted) {
       alert.success("Product deleted successfully");
-      navigate("/admin/products");
-      dispatch({ type: DELETE_PRODUCT_RESET });
+      navigate("/admin/users");
+      dispatch({ type: DELETE_USER_RESET });
     }
-  }, [dispatch, alert, error, deleteError, isDeleted, navigate]);
+  }, [dispatch, alert, error, navigate, isDeleted]);
 
-  const setProducts = () => {
+  const deleteHandler = (id) => {
+    dispatch(deleteUserAction(id));
+  };
+
+  const setUsers = () => {
     const data = {
       columns: [
         {
-          label: "ID",
+          label: "user ID",
           field: "id",
           sort: "asc",
         },
@@ -59,13 +63,13 @@ const ProductsList = () => {
           sort: "asc",
         },
         {
-          label: "Price",
-          field: "price",
+          label: "Email",
+          field: "email",
           sort: "asc",
         },
         {
-          label: "Stock",
-          field: "stock",
+          label: "Role",
+          field: "role",
           sort: "asc",
         },
         {
@@ -76,23 +80,23 @@ const ProductsList = () => {
       rows: [],
     };
 
-    products.forEach((product) => {
+    users.forEach((user) => {
       data.rows.push({
-        id: product._id,
-        name: product.name,
-        price: `$${product.price}`,
-        stock: product.stock,
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
         actions: (
           <Fragment>
             <Link
-              to={`/admin/product/${product._id}`}
+              to={`/admin/user/${user._id}`}
               className="btn btn-primary py-1 px-2"
             >
               <i className="fa fa-pencil"></i>
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
-              onClick={() => deleteProductHandler(product._id)}
+              onClick={() => deleteHandler(user._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -103,14 +107,9 @@ const ProductsList = () => {
 
     return data;
   };
-
-  const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id));
-  };
-
   return (
     <Fragment>
-      <MetaData title={"All Products"} />
+      <MetaData title={"All Users"} />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />
@@ -118,13 +117,13 @@ const ProductsList = () => {
 
         <div className="col-12 col-md-10">
           <Fragment>
-            <h1 className="my-5">All Products</h1>
+            <h1 className="my-5">All Users</h1>
 
             {loading ? (
               <Loader />
             ) : (
               <MDBDataTable
-                data={setProducts()}
+                data={setUsers()}
                 className="px-3"
                 bordered
                 striped
@@ -136,6 +135,6 @@ const ProductsList = () => {
       </div>
     </Fragment>
   );
-};
+}
 
-export default ProductsList;
+export default UserLists;

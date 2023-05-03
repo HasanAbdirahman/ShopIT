@@ -25,7 +25,7 @@ export default function Login() {
   const redirect = location.search ? location.search.split("=")[1] : "/";
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(`/${redirect}`);
+      navigate(redirect);
     }
     if (error) {
       alert.error(error);
