@@ -6,7 +6,6 @@ const {
   authorizedRoles,
 } = require("../middlewares/authenticated");
 
-// put   isAutheticated, back later
 router.get("/", productCtrl.index);
 router.get("/adminProducts", productCtrl.getAdminProducts);
 router.post(

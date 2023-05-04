@@ -15,6 +15,7 @@ app.use(fileUpload());
 
 // setting up config path
 require("dotenv").config();
+
 // import all routes
 const products = require("./routes/products");
 const users = require("./routes/users");

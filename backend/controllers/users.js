@@ -28,7 +28,6 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
-
 // Login user => api/user/login
 const loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
@@ -161,7 +160,7 @@ const updateProfile = catchAsyncErrors(async (req, res, next) => {
     email: req.body.email,
   };
 
-  // Update Avatar TODO
+  // Update avatar
   if (req.body.avatar !== "") {
     const user = await User.findById(req.user.id);
 
@@ -176,21 +175,20 @@ const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
     newUserData.avatar = {
       public_id: result.public_id,
-      url: result.secure.url,
+      url: result.secure_url,
     };
   }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
+    useFindAndModify: false,
   });
 
   res.status(200).json({
     success: true,
-    user,
   });
 });
-
 // logout user => api/user/logout
 const logout = catchAsyncErrors(async (req, res) => {
   res.cookie("token", null, {
