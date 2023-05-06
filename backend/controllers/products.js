@@ -16,13 +16,14 @@ async function createProduct(req, res, next) {
     images = req.body.images;
   }
 
-  let imageLinks = [];
+  let imagesLinks = [];
+
   for (let i = 0; i < images.length; i++) {
     const result = await cloudinary.v2.uploader.upload(images[i], {
       folder: "products",
     });
 
-    imageLinks.push({
+    imagesLinks.push({
       public_id: result.public_id,
       url: result.secure_url,
     });
@@ -31,15 +32,11 @@ async function createProduct(req, res, next) {
   req.body.images = imagesLinks;
   req.body.user = req.user.id;
 
-  await Product.create(req.body, function (err, product) {
-    if (err) {
-      return next(new ErrorHandler("Product not found", 404));
-    } else {
-      res.status(201).json({
-        success: true,
-        product,
-      });
-    }
+  const product = await Product.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    product,
   });
 }
 
@@ -246,8 +243,8 @@ const getAdminProducts = async (req, res) => {
 };
 
 module.exports = {
-  createProduct,
   show,
+  createProduct,
   getAdminProducts,
   update,
   deleteProduct,

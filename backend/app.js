@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 const errorMiddleware = require("./middlewares/errors");
 const fileUpload = require("express-fileupload");
+const path = require("path");
 
 mongoose.set("strictQuery", true);
 
@@ -26,6 +27,16 @@ app.use("/api/products", products);
 app.use("/api/users", users);
 app.use("/api/order", orders);
 app.use("/api/v1", payment);
+
+// setting up the prodction
+
+if (process.env.NODE_ENV === "PRODUCTION") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+  app.get("*", (req, res, next) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+  });
+}
 
 // mounting the errorMiddleware handler
 app.use(errorMiddleware);

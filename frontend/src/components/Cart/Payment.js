@@ -1,20 +1,22 @@
-import { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 
 import MetaData from "../layouts/MetaData";
-import { useDispatch, useSelector } from "react-redux";
-import { useAlert } from "react-alert";
-import { useNavigate } from "react-router-dom";
 import CheckoutSteps from "./CheckoutSteps";
-import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
+import { useDispatch, useSelector } from "react-redux";
 import { createOrder, clearErrors } from "../../actions/orderAction";
 
 import {
+  useStripe,
+  useElements,
   CardNumberElement,
   CardExpiryElement,
   CardCvcElement,
-  useStripe,
-  useElements,
 } from "@stripe/react-stripe-js";
+
+import axios from "axios";
 
 const options = {
   style: {
@@ -27,30 +29,30 @@ const options = {
   },
 };
 
-function Payment() {
+const Payment = () => {
   const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { error } = useSelector((state) => state.newOrder);
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
+  const { error } = useSelector((state) => state.newOrder);
 
   useEffect(() => {
     if (error) {
       alert.error(error);
-      dispatch(clearErrors);
+      dispatch(clearErrors());
     }
-  }, [dispatch, error, alert]);
+  }, [dispatch, alert, error]);
 
   const order = {
-    orderInfo: cartItems,
+    orderItems: cartItems,
     shippingInfo,
   };
 
-  const orderInfo = JSON.parse(sessionStorage.getItem("orderItem"));
-
+  const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
   if (orderInfo) {
     order.itemsPrice = orderInfo.itemsPrice;
     order.shippingPrice = orderInfo.shippingPrice;
@@ -59,15 +61,15 @@ function Payment() {
   }
 
   const paymentData = {
-    amount: Math.round(orderInfo.totalPrice * 100), // we have to pass the amount in cents
+    amount: Math.round(orderInfo.totalPrice * 100), // CENTS
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    document.querySelector("#pay_btn").disable = true;
-    let res;
+    document.querySelector("#pay_btn").disabled = true;
 
+    let res;
     try {
       const config = {
         headers: {
@@ -78,6 +80,8 @@ function Payment() {
       res = await axios.post("/api/v1/payment/process", paymentData, config);
 
       const clientSecret = res.data.client_secret;
+
+      console.log(clientSecret);
 
       if (!stripe || !elements) {
         return;
@@ -95,29 +99,32 @@ function Payment() {
 
       if (result.error) {
         alert.error(result.error.message);
-        document.querySelector("#pay_btn").disable = false;
+        document.querySelector("#pay_btn").disabled = false;
       } else {
-        //payment successfull processed
+        // The payment is processed or not
         if (result.paymentIntent.status === "succeeded") {
           order.paymentInfo = {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
           };
-          dispatch(createOrder);
+
+          dispatch(createOrder(order));
+
           navigate("/success");
         } else {
-          alert.error("There is an error while processing your card");
+          alert.error("There is some issue while payment processing");
         }
       }
     } catch (error) {
-      document.querySelector("#pay_btn").disable = false;
-      alert(error.response.data.message);
+      document.querySelector("#pay_btn").disabled = false;
+      alert.error(error.response.data.message);
     }
   };
 
   return (
     <Fragment>
       <MetaData title={"Payment"} />
+
       <CheckoutSteps shipping confirmOrder payment />
 
       <div className="row wrapper">
@@ -162,6 +169,6 @@ function Payment() {
       </div>
     </Fragment>
   );
-}
+};
 
 export default Payment;

@@ -48,7 +48,7 @@ const loginUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-// Forgit password => api/user/password/forgot
+// Forgot password => api/user/password/forgot
 const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -60,7 +60,9 @@ const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // crete reset password url this is the link he is going to use to reset the password
-  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/password/reset/${resetToken}`;
 
   const message = `Your Password reset token is as follows:\n\n${resetUrl}\n\n If you did not make this request, please ignore `;
   try {
