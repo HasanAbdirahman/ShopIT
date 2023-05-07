@@ -17,8 +17,11 @@ app.use(fileUpload());
 // if (process.env.NODE_ENV !== "PRODUCTION")
 //   require("dotenv").config({ path: "env" });
 
-// // setting up config path
-require("dotenv").config();
+// // // setting up config path
+// require("dotenv").config();
+
+if (process.env.NODE_ENV !== "PRODUCTION")
+  require("dotenv").config({ path: ".env" });
 
 // import all routes
 const products = require("./routes/products");
