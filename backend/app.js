@@ -14,7 +14,10 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(fileUpload());
 
-// setting up config path
+// if (process.env.NODE_ENV !== "PRODUCTION")
+//   require("dotenv").config({ path: "env" });
+
+// // setting up config path
 require("dotenv").config();
 
 // import all routes
