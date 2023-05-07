@@ -31,7 +31,7 @@ export default function Login() {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, navigate, alert, isAuthenticated, error]);
+  }, [dispatch, navigate, alert, isAuthenticated, error, redirect]);
 
   function handleSubmit(evt) {
     evt.preventDefault();

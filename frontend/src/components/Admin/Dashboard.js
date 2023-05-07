@@ -71,7 +71,7 @@ function Dashboard() {
                         <br /> <b>{products && products.length}</b>
                       </div>
                     </div>
-                    <a
+                    <Link
                       className="card-footer text-white clearfix small z-1"
                       to="/admin/products"
                     >
@@ -79,7 +79,7 @@ function Dashboard() {
                       <span className="float-right">
                         <i className="fa fa-angle-right"></i>
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -91,7 +91,7 @@ function Dashboard() {
                         <br /> <b>{orders && orders.length}</b>
                       </div>
                     </div>
-                    <a
+                    <Link
                       className="card-footer text-white clearfix small z-1"
                       to="/admin/orders"
                     >
@@ -99,7 +99,7 @@ function Dashboard() {
                       <span className="float-right">
                         <i className="fa fa-angle-right"></i>
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 

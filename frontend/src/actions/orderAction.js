@@ -57,7 +57,7 @@ export const orderDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: ORDERS_DETAIL_REQUEST });
 
-    const { data } = await axios.get(`api/order/${id}`);
+    const { data } = await axios.get(`/api/order/${id}`);
 
     dispatch({
       type: ORDERS_DETAIL_SUCCESS,

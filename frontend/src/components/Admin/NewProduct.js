@@ -50,7 +50,7 @@ const NewProduct = ({ history }) => {
       alert.success("Product created successfully");
       dispatch({ type: NEW_PRODUCT_RESET });
     }
-  }, [dispatch, alert, error, success, history]);
+  }, [dispatch, alert, error, success, history, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

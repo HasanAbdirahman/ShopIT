@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layouts/MetaData";
@@ -45,7 +45,7 @@ function ProductReviews() {
       navigate("/admin/reviews");
       dispatch({ type: DELETE_PRODUCT_REVIEW_RESET });
     }
-  }, [dispatch, alert, navigate, productId, error, isDeleted]);
+  }, [dispatch, alert, navigate, deleteError, productId, error, isDeleted]);
 
   const deleteHandler = (id) => {
     dispatch(deleteProductReview(id, productId));

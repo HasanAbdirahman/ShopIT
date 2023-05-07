@@ -233,14 +233,14 @@ const UpdatedProduct = () => {
                   </div>
 
                   {oldImages &&
-                    oldImages.map((img) => {
+                    oldImages.map((img) => (
                       <img
                         key={img}
                         className="mr-2 mt-3"
                         src={img.url}
                         alt={img.url}
-                      />;
-                    })}
+                      />
+                    ))}
 
                   {imagesPreview.map((img) => (
                     <img

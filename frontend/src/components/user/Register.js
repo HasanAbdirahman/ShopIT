@@ -35,7 +35,7 @@ export default function Register() {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, isAuthenticated, error]);
+  }, [dispatch, navigate, alert, isAuthenticated, error]);
 
   function submitHandler(e) {
     e.preventDefault();

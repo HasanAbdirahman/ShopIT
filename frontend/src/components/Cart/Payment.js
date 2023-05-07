@@ -2,7 +2,6 @@ import React, { Fragment, useEffect } from "react";
 
 import MetaData from "../layouts/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
-
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +35,7 @@ const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { error } = useSelector((state) => state.newOrder);
 
@@ -61,7 +60,7 @@ const Payment = () => {
   }
 
   const paymentData = {
-    amount: Math.round(orderInfo.totalPrice * 100), // CENTS
+    amount: Math.round(orderInfo.totalPrice * 100),
   };
 
   const submitHandler = async (e) => {
@@ -80,8 +79,6 @@ const Payment = () => {
       res = await axios.post("/api/v1/payment/process", paymentData, config);
 
       const clientSecret = res.data.client_secret;
-
-      console.log(clientSecret);
 
       if (!stripe || !elements) {
         return;

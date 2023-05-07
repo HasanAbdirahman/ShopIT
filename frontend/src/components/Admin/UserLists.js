@@ -43,7 +43,7 @@ function UserLists() {
       navigate("/admin/users");
       dispatch({ type: DELETE_USER_RESET });
     }
-  }, [dispatch, alert, error, navigate, isDeleted]);
+  }, [dispatch, alert, deleteError, error, navigate, isDeleted]);
 
   const deleteHandler = (id) => {
     dispatch(deleteUserAction(id));
