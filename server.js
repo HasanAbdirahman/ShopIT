@@ -1,8 +1,8 @@
-const app = require("./app");
+const app = require("./backend/app");
 const cloudinary = require("cloudinary");
 
 // connect to the db
-require("./config/database");
+require("./backend/config/database");
 
 if (process.env.NODE_ENV !== "PRODUCTION")
   require("dotenv").config({ path: ".env" });
