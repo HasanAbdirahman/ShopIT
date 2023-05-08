@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "full ecommerce site using MERN stack",
   "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node/backend/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
