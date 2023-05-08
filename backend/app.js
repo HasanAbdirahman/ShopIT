@@ -14,14 +14,11 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(fileUpload());
 
-// if (process.env.NODE_ENV !== "PRODUCTION")
-//   require("dotenv").config({ path: "env" });
-
 // // // setting up config path
 require("dotenv").config();
 
-if (process.env.NODE_ENV !== "PRODUCTION")
-  require("dotenv").config({ path: ".env" });
+// if (process.env.NODE_ENV !== "PRODUCTION")
+//   require("dotenv").config({ path: ".env" });
 
 // import all routes
 const products = require("./routes/products");

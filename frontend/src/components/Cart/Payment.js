@@ -16,6 +16,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 import axios from "axios";
+import { clearCart } from "../../actions/cartActions";
 
 const options = {
   style: {
@@ -105,8 +106,9 @@ const Payment = () => {
             status: result.paymentIntent.status,
           };
 
+          dispatch(clearCart(cartItems));
+          cartItems.length = 0;
           dispatch(createOrder(order));
-
           navigate("/success");
         } else {
           alert.error("There is some issue while payment processing");
