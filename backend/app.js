@@ -26,8 +26,6 @@ const users = require("./routes/users");
 const orders = require("./routes/orders");
 const payment = require("./routes/payment");
 
-//     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
-
 app.use("/api/products", products);
 app.use("/api/users", users);
 app.use("/api/order", orders);
