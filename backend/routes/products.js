@@ -31,6 +31,10 @@ router.delete(
   productCtrl.deleteProduct
 );
 
+// related products
+
+router.get("/relatedPrducts", isAutheticated, productCtrl.relatedProducts);
+
 // this route creates a new review and updates the product as well see the controller interesting really
 router.put("/review", isAutheticated, productCtrl.createProductReview);
 

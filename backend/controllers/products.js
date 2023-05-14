@@ -242,6 +242,25 @@ const getAdminProducts = async (req, res) => {
   });
 };
 
+// relatedProducts => /api/products/relatedProducts
+const relatedProducts = async (req, res, next) => {
+  // check the current product category
+  const product = await Product.findById(req.params.id);
+  //  find the category associated with the current product
+
+  const currentCategory = product.find({ category });
+  // when i found out the category now I have to look all the products and check which product has that category
+  console.log(currentCategory);
+  const allProducts = await Product.find({ category: currentCategory });
+  // console.log("hassan" + allProducts);
+
+  res.status(200).json({
+    success: true,
+    currentCategory,
+    allProducts,
+  });
+};
+
 module.exports = {
   show,
   createProduct,
@@ -249,6 +268,7 @@ module.exports = {
   update,
   deleteProduct,
   index,
+  relatedProducts,
   createProductReview,
   getProductReviews,
   deleteProductReview,
