@@ -193,7 +193,7 @@ const ProductDetails = () => {
               <hr />
 
               <p>
-                Status:{" "}
+                Status:
                 <span
                   id="stock_status"
                   className={product.stock > 0 ? "greenColor" : "redColor"}
