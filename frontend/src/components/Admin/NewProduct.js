@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 
 import MetaData from "../layouts/MetaData";
 import Sidebar from "./Sidebar";
-import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { newProduct, clearErrors } from "../../actions/productActions";
@@ -34,7 +33,6 @@ const NewProduct = ({ history }) => {
   ];
 
   const alert = useAlert();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { loading, error, success } = useSelector((state) => state.newProduct);
@@ -46,11 +44,11 @@ const NewProduct = ({ history }) => {
     }
 
     if (success) {
-      navigate("/admin/products");
+      history("/admin/products");
       alert.success("Product created successfully");
       dispatch({ type: NEW_PRODUCT_RESET });
     }
-  }, [dispatch, alert, error, success, history, navigate]);
+  }, [dispatch, alert, error, success, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();

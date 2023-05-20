@@ -1,14 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import MetaData from "../layouts/MetaData";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../../actions/userActions";
-function NewPassword() {
+function NewPassword({ history }) {
   const alert = useAlert();
   const dispatch = useDispatch();
   const params = useParams();
-  const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,9 +20,9 @@ function NewPassword() {
     }
     if (success) {
       alert.success("Password was successfully changed");
-      navigate("/login");
+      history("/login");
     }
-  }, [dispatch, params, success, alert, error]);
+  }, [dispatch, params, success, history, alert, error]);
 
   function submitHandler(e) {
     e.preventDefault();

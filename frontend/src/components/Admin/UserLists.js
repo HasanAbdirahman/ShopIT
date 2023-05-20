@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layouts/MetaData";
@@ -16,9 +16,8 @@ import {
 
 import { DELETE_USER_RESET } from "../../constants/userConstant";
 
-function UserLists() {
+function UserLists({ history }) {
   const alert = useAlert();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, users } = useSelector((state) => state.allUsers);
   const { error: deleteError, isDeleted } = useSelector(
@@ -40,10 +39,10 @@ function UserLists() {
 
     if (isDeleted) {
       alert.success("Product deleted successfully");
-      navigate("/admin/users");
+      history("/admin/users");
       dispatch({ type: DELETE_USER_RESET });
     }
-  }, [dispatch, alert, deleteError, error, navigate, isDeleted]);
+  }, [dispatch, alert, deleteError, error, history, isDeleted]);
 
   const deleteHandler = (id) => {
     dispatch(deleteUserAction(id));

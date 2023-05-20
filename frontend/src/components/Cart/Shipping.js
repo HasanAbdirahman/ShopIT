@@ -4,12 +4,10 @@ import MetaData from "../layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
 import { saveShippingInfo } from "../../actions/cartActions";
 
-import { useNavigate } from "react-router-dom";
 import CheckoutSteps from "./CheckoutSteps";
 
-function Shipping() {
+function Shipping({ history }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const countriesList = Object.values(countries);
 
   const { shippingInfo } = useSelector((state) => state.cart);
@@ -22,7 +20,7 @@ function Shipping() {
   function submitHandler(e) {
     e.preventDefault();
     dispatch(saveShippingInfo({ address, postalCode, phoneNo, country, city }));
-    navigate("/order/confirm");
+    history("/order/confirm");
   }
 
   return (

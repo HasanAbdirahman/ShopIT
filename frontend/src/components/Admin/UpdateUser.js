@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import MetaData from "../layouts/MetaData";
 import Sidebar from "./Sidebar";
@@ -14,10 +14,9 @@ import {
 
 import { UPDATE_USER_RESET } from "../../constants/userConstant";
 
-function UpdateUser() {
+function UpdateUser({ history }) {
   const alert = useAlert();
   const params = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -44,10 +43,10 @@ function UpdateUser() {
 
     if (isUpdated) {
       alert.success("Updated User successfully");
-      navigate("/admin/users");
+      history("/admin/users");
       dispatch({ type: UPDATE_USER_RESET });
     }
-  }, [dispatch, alert, error, user, userId, navigate, isUpdated]);
+  }, [dispatch, alert, error, user, userId, history, isUpdated]);
 
   const submitHandler = (e) => {
     e.preventDefault();

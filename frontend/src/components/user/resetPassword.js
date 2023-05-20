@@ -1,13 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import MetaData from "../layouts/MetaData";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword, clearErrors } from "../../actions/userActions";
 
-const ResetPassword = () => {
-  const navigate = useNavigate();
+const ResetPassword = ({ history }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const { error, success } = useSelector((state) => state.forgotPassword);
@@ -23,9 +22,9 @@ const ResetPassword = () => {
     }
     if (success) {
       alert.success(success);
-      navigate("/login");
+      history("/login");
     }
-  }, [dispatch, alert, success, navigate, error]);
+  }, [dispatch, alert, success, history, error]);
 
   const HandleSubmit = (event) => {
     event.preventDefault();

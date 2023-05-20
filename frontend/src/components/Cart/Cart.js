@@ -1,13 +1,12 @@
 import { Fragment } from "react";
 
 import MetaData from "../layouts/MetaData";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart, removeItemFromCart } from "../../actions/cartActions";
 
-function Cart() {
+function Cart({ history }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
   const { isAuthenticated } = useSelector((state) => state.user);
 
@@ -35,9 +34,9 @@ function Cart() {
     //  the shipping page
     // go to the login file and see what the redirects shows
     if (isAuthenticated) {
-      navigate("/shipping");
+      history("/shipping");
     } else {
-      navigate("/login");
+      history("/login");
     }
   };
 

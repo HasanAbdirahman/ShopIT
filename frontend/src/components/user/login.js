@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,14 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearErrors, login } from "../../actions/userActions";
 
-export default function Login() {
+export default function Login({ history }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const location = useLocation();
   const alert = useAlert();
-  const navigate = useNavigate();
 
   const { isAuthenticated, error, loading } = useSelector(
     (state) => state.user
@@ -25,13 +24,13 @@ export default function Login() {
   const redirect = location.search ? location.search.split("=")[1] : "/";
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(redirect);
+      history(redirect);
     }
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, navigate, alert, isAuthenticated, error, redirect]);
+  }, [dispatch, history, alert, isAuthenticated, error, redirect]);
 
   function handleSubmit(evt) {
     evt.preventDefault();

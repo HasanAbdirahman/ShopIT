@@ -1,48 +1,33 @@
 {
   "name": "shopit",
   "version": "1.0.0",
-  "description": "full ecommerce site using MERN stack",
-  "main": "index.js",
-  "engines": {
-    "node": "18.13.0"
-  },
+  "description": "full ecommerce site using mern",
+  "main": "server.js",
   "scripts": {
-    "start": "node/backend/server.js",
+    "start": "SET node backend/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server",
-    "seeder": "node backend/utils/seeder.js"
+    "seeder": "node backend/utils/seeder.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Hasan Abdirahman",
   "license": "ISC",
   "dependencies": {
-    "@stripe/react-stripe-js": "^2.1.0",
-    "@stripe/stripe-js": "^1.52.1",
-    "bcrypt": "^5.1.0",
-    "body-parser": "^1.20.2",
-    "cloudinary": "^1.35.0",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-fileupload": "^1.4.0",
-    "fs": "^0.0.1-security",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.10.0",
-    "nodemailer": "^6.9.1",
-    "react-js-pagination": "^3.0.3",
-    "stripe": "^12.1.1",
-    "validator": "^13.9.0"
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cloudinary": "^1.23.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.17",
+    "nodemailer": "^6.4.16",
+    "stripe": "^8.128.0",
+    "validator": "^13.1.17"
   },
-  "proxy": "http://127.0.0.1:5000",
   "devDependencies": {
-    "assert": "^2.0.0",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.0",
-    "https-browserify": "^1.0.0",
-    "os-browserify": "^0.3.0",
-    "process": "^0.11.10",
-    "react-app-rewired": "^2.2.1",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "url": "^0.11.0"
-  }
+    "nodemon": "^2.0.6"
+  },
+  "proxy": "http://localhost:5000"
 }

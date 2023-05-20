@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import MetaData from "../layouts/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 const ConfirmOrder = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
-  const navigate = useNavigate();
 
   // Calculate Order Prices
   const itemsPrice = cartItems.reduce(
@@ -20,7 +19,7 @@ const ConfirmOrder = () => {
   const taxPrice = Number((0.05 * itemsPrice).toFixed(2));
   const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
 
-  const processToPayment = () => {
+  const processToPayment = ({ history }) => {
     const data = {
       itemsPrice: itemsPrice.toFixed(2),
       shippingPrice,
@@ -29,7 +28,7 @@ const ConfirmOrder = () => {
     };
 
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
-    navigate("/payment");
+    history("/payment");
   };
 
   return (

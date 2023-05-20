@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layouts/MetaData";
@@ -15,9 +14,8 @@ import {
 
 import { DELETE_PRODUCT_REVIEW_RESET } from "../../constants/productConstant";
 
-function ProductReviews() {
+function ProductReviews({ history }) {
   const alert = useAlert();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { error, reviews } = useSelector((state) => state.productReviews);
   const { error: deleteError, isDeleted } = useSelector(
@@ -42,10 +40,10 @@ function ProductReviews() {
 
     if (isDeleted) {
       alert.success("Review deleted successfully");
-      navigate("/admin/reviews");
+      history("/admin/reviews");
       dispatch({ type: DELETE_PRODUCT_REVIEW_RESET });
     }
-  }, [dispatch, alert, navigate, deleteError, productId, error, isDeleted]);
+  }, [dispatch, alert, history, deleteError, productId, error, isDeleted]);
 
   const deleteHandler = (id) => {
     dispatch(deleteProductReview(id, productId));

@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
 import MetaData from "../layouts/MetaData";
-import { useNavigate } from "react-router-dom";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +10,7 @@ import {
 } from "../../actions/userActions";
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstant";
 
-export default function UpdateProfile() {
+export default function UpdateProfile({ history }) {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const alert = useAlert();
@@ -21,7 +20,6 @@ export default function UpdateProfile() {
   );
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
   const { error, loading, isUpdated } = useSelector((state) => state.users);
@@ -40,13 +38,13 @@ export default function UpdateProfile() {
       alert.success("user updated successfully");
       dispatch(loadUser());
 
-      navigate("/me");
+      history("/me");
 
       dispatch({
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, navigate, user, alert, isUpdated, error]);
+  }, [dispatch, history, user, alert, isUpdated, error]);
 
   function submitHandler(e) {
     e.preventDefault();

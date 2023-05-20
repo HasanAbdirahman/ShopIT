@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(process.env.CLOUD_URL, {
+  useCreateIndex: true,
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 const db = mongoose.connection;

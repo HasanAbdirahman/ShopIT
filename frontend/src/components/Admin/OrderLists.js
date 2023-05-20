@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layouts/MetaData";
@@ -15,10 +15,9 @@ import {
 } from "../../actions/orderAction";
 import { DELETE_ORDER_RESETS } from "../../constants/orderConstant";
 
-const OrderLists = () => {
+const OrderLists = ({ history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { error, loading, orders } = useSelector((state) => state.allOrders);
   const { isDeleted } = useSelector((state) => state.order);
@@ -33,10 +32,10 @@ const OrderLists = () => {
 
     if (isDeleted) {
       alert.success("Product deleted successfully");
-      navigate("/admin/orders");
+      history("/admin/orders");
       dispatch({ type: DELETE_ORDER_RESETS });
     }
-  }, [dispatch, alert, error, isDeleted, navigate]);
+  }, [dispatch, alert, error, isDeleted, history]);
 
   const deleteHandler = (id) => {
     dispatch(deleteOrderAction(id));

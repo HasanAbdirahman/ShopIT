@@ -2,7 +2,6 @@ import React, { Fragment, useEffect } from "react";
 
 import MetaData from "../layouts/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
-import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder, clearErrors } from "../../actions/orderAction";
@@ -29,12 +28,11 @@ const options = {
   },
 };
 
-const Payment = () => {
+const Payment = ({ history }) => {
   const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
@@ -109,7 +107,7 @@ const Payment = () => {
           dispatch(clearCart(cartItems));
           cartItems.length = 0;
           dispatch(createOrder(order));
-          navigate("/success");
+          history("/success");
         } else {
           alert.error("There is some issue while payment processing");
         }

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import MetaData from "../layouts/MetaData";
 import Sidebar from "./Sidebar";
@@ -13,11 +13,10 @@ import {
 } from "../../actions/productActions";
 import { UPDATE_PRODUCT_RESET } from "../../constants/productConstant";
 
-const UpdatedProduct = () => {
+const UpdatedProduct = ({ history }) => {
   const alert = useAlert();
   const params = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const productId = params.id;
 
   const { error, product } = useSelector((state) => state.productDetails);
@@ -73,7 +72,7 @@ const UpdatedProduct = () => {
       dispatch(clearErrors());
     }
     if (isUpdated) {
-      navigate("/admin/products");
+      history("/admin/products");
       alert.success("The product was updated successfully");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
@@ -81,7 +80,7 @@ const UpdatedProduct = () => {
     alert,
     dispatch,
     error,
-    navigate,
+    history,
     product,
     productId,
     updateError,

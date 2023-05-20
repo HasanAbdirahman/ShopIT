@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layouts/MetaData";
@@ -15,10 +15,9 @@ import {
 } from "../../actions/productActions";
 import { DELETE_PRODUCT_RESET } from "../../constants/productConstant";
 
-const ProductsList = () => {
+const ProductsList = ({ history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { loading, error, products } = useSelector((state) => state.products);
   const { error: deleteError, isDeleted } = useSelector(
@@ -40,10 +39,10 @@ const ProductsList = () => {
 
     if (isDeleted) {
       alert.success("Product deleted successfully");
-      navigate("/admin/products");
+      history("/admin/products");
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
-  }, [dispatch, alert, error, deleteError, isDeleted, navigate]);
+  }, [dispatch, alert, error, deleteError, isDeleted, history]);
 
   const setProducts = () => {
     const data = {

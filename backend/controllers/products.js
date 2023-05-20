@@ -55,7 +55,7 @@ async function index(req, res, next) {
   apiFeatures.pagination(resPerPage);
   // Simply add clone like this if you want to execute the query second time,
   // as we are doing. After v6.0. you can execute second query like this:.  .clone()
-  products = await apiFeatures.query.clone();
+  products = await apiFeatures.query;
 
   res.status(200).json({
     success: true,
