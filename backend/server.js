@@ -4,8 +4,8 @@ const cloudinary = require("cloudinary");
 // connect to the db
 require("./config/database");
 
-// if (process.env.NODE_ENV !== "PRODUCTION")
-//   require("dotenv").config({ path: ".env" });
+if (process.env.NODE_ENV !== "PRODUCTION")
+  require("dotenv").config({ path: ".env" });
 
 // handles uncaught exceptions eg console.log(a) where a is not defined
 process.on("uncaughtException", (err) => {
